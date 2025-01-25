@@ -1,8 +1,8 @@
 import React from "react";
-import "./AdminNavbar.css";
+import "./UserNavbar.css";
 import { useSelector } from "react-redux";
 
-const AdminNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
+const UserNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
   const { user } = useSelector((state) => state.user);
   return (
     <>
@@ -28,4 +28,4 @@ const AdminNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
   );
 };
 
-export default AdminNavbar;
+export default UserNavbar;

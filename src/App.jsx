@@ -16,6 +16,7 @@ import { loginSuccess } from "./redux/Slices/userSlice.jsx";
 import VerifyUser from "./Pages/VerifyUser/VerifyUser.jsx";
 import ChangePassword from "./Pages/ChangePassword/ChangePassword.jsx";
 import UserDashboard from "./Pages/UserDashboard/UserDashboard.jsx";
+import LoanRequest from "./Pages/LoanRequest/LoanRequest.jsx";
 
 const api = axios.create({
   baseURL: url,
@@ -56,11 +57,12 @@ function App() {
             path="/user/dashboard"
             element={
               <UserDashboard
-                isSidebarOpen={isSidebarOpen}
-                toggleSidebar={toggleSidebar}
-                setIsSidebarOpen={setIsSidebarOpen}
+              isSidebarOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
+              setIsSidebarOpen={setIsSidebarOpen}
               />
-          } />
+            } />
+            <Route path="/user/loan-req" element={<LoanRequest isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />} />
         </Routes>
       </BrowserRouter>
     </>

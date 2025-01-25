@@ -1,5 +1,5 @@
-import AdminNavbar from "../../Components/AdminNavbar/AdminNavbar";
-import AdminSidebar from "../../Components/AdminSidebar/AdminSidebar";
+import AdminNavbar from "../../Components/AdminNavbar/UserNavbar";
+import AdminSidebar from "../../Components/AdminSidebar/UserSidebar";
 import "./UserDashboard.css";
 
 const UserDashboard = ( { isSidebarOpen,
