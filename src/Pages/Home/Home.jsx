@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import "./Home.css"; // Importing the CSS file
 import Footer from "../../Components/Footer/Footer";
+import axios from "axios";
+import { url } from "../../utils/url.js";
+import { toast } from "sonner";
 
 const Home = () => {
   const [category, setCategory] = useState("");
@@ -17,7 +20,10 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [cnic, setCnic] = useState(""); // State for CNIC input
   const [email, setEmail] = useState(""); // State for email input
-
+  const [userId, setUserId] = useState(null);
+  const api = axios.create({
+    baseURL: url,
+  });
   const loanCategories = [
     {
       name: "Wedding Loans",
@@ -53,7 +59,9 @@ const Home = () => {
   const calculateEMI = () => {
     if (!loanPeriod || !initialDeposit || !loanAmount || !category) return;
 
-    const selectedCategory = loanCategories.find(cat => cat.name === category);
+    const selectedCategory = loanCategories.find(
+      (cat) => cat.name === category
+    );
     const maxLoan = selectedCategory?.maxLoan;
 
     if (typeof maxLoan === "number" && loanAmount > maxLoan) {
@@ -74,7 +82,9 @@ const Home = () => {
     const amount = Number(value);
     setLoanAmount(amount);
 
-    const selectedCategory = loanCategories.find(cat => cat.name === category);
+    const selectedCategory = loanCategories.find(
+      (cat) => cat.name === category
+    );
     const maxLoan = selectedCategory?.maxLoan;
 
     if (typeof maxLoan === "number" && amount > maxLoan) {
@@ -93,11 +103,15 @@ const Home = () => {
     const deposit = Number(value);
     setInitialDeposit(deposit);
 
-    const selectedCategory = loanCategories.find(cat => cat.name === category);
+    const selectedCategory = loanCategories.find(
+      (cat) => cat.name === category
+    );
     const maxLoan = selectedCategory?.maxLoan;
 
     if (deposit > loanAmount) {
-      setDepositError("Initial deposit cannot exceed the required loan amount.");
+      setDepositError(
+        "Initial deposit cannot exceed the required loan amount."
+      );
     } else {
       setDepositError("");
     }
@@ -112,10 +126,77 @@ const Home = () => {
     setShowModal(true); // Open the modal on button click
   };
 
-  const handleModalSubmit = () => {
+  const addLoanReq = async () => {
+    console.log(category);
+    console.log(subCategory);
+    console.log(loanPeriod);
+    console.log(initialDeposit);
+    console.log(loanAmount);
+    console.log(userId);
+
+    if (userId === null) {
+      return;
+    }
+    const loanData = {
+      category,
+      subCategory,
+      period: loanPeriod,
+      depositeAmount: initialDeposit,
+      loanAmount,
+      userId: userId,
+    };
+    try {
+      const response = await api.post("loanreq/add", loanData);
+      console.log("Loan request submitted:", response.data);
+      setCategory("");
+      setSubCategory("");
+      setLoanPeriod("");
+      setInitialDeposit(0);
+      setLoanAmount(0);
+      setEmi(null);
+      setLoanError("");
+      setPeriodError(false);
+      setDepositError("");
+      setUserId(null);
+      setCnic("");
+      setEmail("");
+      toast.success("Application submitted successfully!", {
+        style: {
+          padding: "16px",
+          backgroundColor: "#0eadad",
+          color: "white",
+          border: "1px solid #0eadad",
+        },
+      })
+    } catch (error) {
+      console.error("Error submitting loan request:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      addLoanReq();
+    }
+  }, [userId]);
+
+  const handleModalSubmit = async () => {
     // Handle the submission of CNIC and email
     console.log("CNIC:", cnic);
     console.log("Email:", email);
+
+    const res = await api.post("auth/signup", { cnic, email });
+
+    if (res?.data?.data) {
+      setUserId(res?.data?.data?._id);
+      // toast.success("Application submitted successfully!", {
+      //   style: {
+      //     padding: "16px",
+      //     backgroundColor: "#0eadad",
+      //     color: "white",
+      //     border: "1px solid #0eadad",
+      //   },
+      // });
+    }
     setShowModal(false); // Close the modal after submission
   };
 
@@ -153,7 +234,7 @@ const Home = () => {
             <div className="form-group">
               <label>Category</label>
               <div className="custom-dropdown">
-                <div 
+                <div
                   className="dropdown-header"
                   onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
                 >
@@ -162,8 +243,8 @@ const Home = () => {
                 {showCategoryDropdown && (
                   <div className="dropdown-list">
                     {loanCategories.map((cat, idx) => (
-                      <div 
-                        key={idx} 
+                      <div
+                        key={idx}
                         className="dropdown-item"
                         onClick={() => {
                           setCategory(cat.name);
@@ -182,9 +263,11 @@ const Home = () => {
             <div className="form-group">
               <label>Subcategory</label>
               <div className="custom-dropdown">
-                <div 
+                <div
                   className="dropdown-header"
-                  onClick={() => setShowSubCategoryDropdown(!showSubCategoryDropdown)}
+                  onClick={() =>
+                    setShowSubCategoryDropdown(!showSubCategoryDropdown)
+                  }
                 >
                   {subCategory || "Select Subcategory"}
                 </div>
@@ -193,8 +276,8 @@ const Home = () => {
                     {loanCategories
                       .find((cat) => cat.name === category)
                       ?.subCategories.map((sub, idx) => (
-                        <div 
-                          key={idx} 
+                        <div
+                          key={idx}
                           className="dropdown-item"
                           onClick={() => {
                             setSubCategory(sub);
@@ -216,9 +299,11 @@ const Home = () => {
                 value={loanAmount}
                 onChange={(e) => handleLoanAmountChange(e.target.value)}
                 placeholder="e.g., 300000"
-                style={{borderColor: loanError ? 'red' : ''}}
+                style={{ borderColor: loanError ? "red" : "" }}
               />
-              {loanError && <p style={{color: 'red', margin: '0.5rem 0'}}>{loanError}</p>}
+              {loanError && (
+                <p style={{ color: "red", margin: "0.5rem 0" }}>{loanError}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -229,21 +314,32 @@ const Home = () => {
                 onChange={(e) => {
                   const period = Number(e.target.value);
                   setLoanPeriod(period);
-                  const selectedCategory = loanCategories.find(cat => cat.name === category);
+                  const selectedCategory = loanCategories.find(
+                    (cat) => cat.name === category
+                  );
                   if (selectedCategory && period > selectedCategory.period) {
                     setPeriodError(true);
                   } else {
                     setPeriodError(false);
                   }
-                  if(loanAmount && initialDeposit && category && period <= selectedCategory.period) {
+                  if (
+                    loanAmount &&
+                    initialDeposit &&
+                    category &&
+                    period <= selectedCategory.period
+                  ) {
                     const emi = (loanAmount - initialDeposit) / (period * 12);
                     setEmi(emi.toFixed(2));
                   }
                 }}
                 placeholder="e.g., 3"
-                style={{borderColor: periodError ? 'red' : ''}}
+                style={{ borderColor: periodError ? "red" : "" }}
               />
-              {periodError && <p style={{color: 'red', margin: '0.5rem 0'}}>Loan period exceeds the maximum allowed for this category.</p>}
+              {periodError && (
+                <p style={{ color: "red", margin: "0.5rem 0" }}>
+                  Loan period exceeds the maximum allowed for this category.
+                </p>
+              )}
             </div>
 
             <div className="form-group">
@@ -253,30 +349,38 @@ const Home = () => {
                 value={initialDeposit}
                 onChange={(e) => handleInitialDepositChange(e.target.value)}
                 placeholder="e.g., 100000"
-                style={{borderColor: depositError ? 'red' : ''}}
+                style={{ borderColor: depositError ? "red" : "" }}
               />
-              {depositError && <p style={{color: 'red', margin: '0.5rem 0'}}>{depositError}</p>}
+              {depositError && (
+                <p style={{ color: "red", margin: "0.5rem 0" }}>
+                  {depositError}
+                </p>
+              )}
             </div>
           </div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            gap: '1rem',
-          }}>
-            <button className="calculate-btn" onClick={handleApplyClick} disabled={!category || depositError || periodError}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "1rem",
+            }}
+          >
+            <button
+              className="calculate-btn"
+              onClick={handleApplyClick}
+              disabled={!category || depositError || periodError}
+            >
               Applied
             </button>
 
-            <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: "1rem" }}>
               {emi && (
                 <p className="emi-result">
-                  {emi.includes("exceeds") ? (
-                    emi
-                  ) : (
-                    `Estimated EMI: PKR ${emi} / month`
-                  )}
+                  {emi.includes("exceeds")
+                    ? emi
+                    : `Estimated EMI: PKR ${emi} / month`}
                 </p>
               )}
             </div>
@@ -306,10 +410,22 @@ const Home = () => {
                   placeholder="Enter Email"
                 />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-
-              <button onClick={handleModalSubmit} className="submit-btn">Submit</button>
-              <button onClick={() => setShowModal(false)} className="close-btn">Close</button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "1rem",
+                }}
+              >
+                <button onClick={handleModalSubmit} className="submit-btn">
+                  Submit
+                </button>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="close-btn"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
