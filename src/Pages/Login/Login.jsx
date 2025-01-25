@@ -25,7 +25,7 @@ const {user} = useSelector(state => state.user)
 
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    email: "",
+    storeNumber: "", // Changed from cnic to storeNumber
     password: "",
   });
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const {user} = useSelector(state => state.user)
     try {
       dispatch(loginStart());
       const res = await api.post("auth/login", {
-        email: formData.email,
+        storeNumber: formData.storeNumber, // Changed from cnic to storeNumber
         password: formData.password
       });
 
@@ -81,10 +81,10 @@ const {user} = useSelector(state => state.user)
           <div className="input-group" style={{ width: "100%" }}>
             <input
               type="text"
-              name="email"
-              value={formData.email}
+              name="storeNumber" // Changed from cnic to storeNumber
+              value={formData.storeNumber} // Changed from formData.cnic to formData.storeNumber
               onChange={handleChange}
-              placeholder="Enter email"
+              placeholder="Enter Store Number" // Changed placeholder text
               required
             />
           </div>

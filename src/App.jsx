@@ -1,13 +1,21 @@
-import { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Router, Routes, useNavigate } from 'react-router-dom'
-import Login from './Pages/Login/Login.jsx'
-import  Home  from './Pages/Home/Home.jsx';
-import { url } from './utils/url.js';
-import axios from 'axios';
-import Signup from './Pages/Signup/Signup.jsx';
-import { useDispatch } from 'react-redux';
-import { loginSuccess } from './redux/Slices/userSlice.jsx';
-import VerifyUser from './Pages/VerifyUser/VerifyUser.jsx';
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Route,
+  Router,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import Login from "./Pages/Login/Login.jsx";
+import Home from "./Pages/Home/Home.jsx";
+import { url } from "./utils/url.js";
+import axios from "axios";
+import Signup from "./Pages/Signup/Signup.jsx";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "./redux/Slices/userSlice.jsx";
+import VerifyUser from "./Pages/VerifyUser/VerifyUser.jsx";
+import ChangePassword from "./Pages/ChangePassword/ChangePassword.jsx";
+import UserDashboard from "./Pages/UserDashboard/UserDashboard.jsx";
 
 const api = axios.create({
   baseURL: url,
@@ -16,7 +24,7 @@ const api = axios.create({
 function App() {
   const dispatch = useDispatch();
 
-    useEffect(() => {
+  useEffect(() => {
     const isUserLoggedIn = async () => {
       const res = await api.get("auth/isUserLoggedIn", {
         headers: {
@@ -30,22 +38,33 @@ function App() {
     };
     isUserLoggedIn();
   }, []);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
   return (
     <>
-     
-     <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/otp" element={<VerifyUser />} />
           <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/user/dashboard"
+            element={
+              <UserDashboard
+                isSidebarOpen={isSidebarOpen}
+                toggleSidebar={toggleSidebar}
+                setIsSidebarOpen={setIsSidebarOpen}
+              />
+          } />
         </Routes>
       </BrowserRouter>
-    
-      
     </>
-  )
+  );
 }
 
-export default App
+export default App;
