@@ -4,3 +4,25 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+:root {
+  /* Primary Colors */
+  --primary-navy: #003f5c;
+  --primary-sky: #0077b6;
+
+  /* Secondary Colors */
+  --secondary-green: #2ec4b6;
+  --secondary-yellow: #ffba08;
+
+  /* Backgrounds & Neutrals */
+  --bg-light: #f4f4f4;
+  --bg-white: #ffffff;
+  --neutral-dark: #333333;
+
+  /* Error & Alerts */
+  --error-red: #d90429;
+  --warning-orange: #ffa502;
+
+  /* Typography */
+  --text-primary: #222429;
+  --text-secondary: #6c757d;
+}
