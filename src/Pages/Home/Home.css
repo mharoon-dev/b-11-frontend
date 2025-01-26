@@ -329,7 +329,7 @@
   }
   
   .loan-calculator {
-    padding: 1.5rem;
+    padding: 10px;
   }
   
   .form-group label {
@@ -360,7 +360,7 @@
   position: relative;
   width: 100%;
   margin: 0.8rem 0;
-  z-index: 200; /* Added higher z-index */
+  z-index: 200 !important; /* Added higher z-index */
 }
 
 .dropdown-header {
@@ -496,7 +496,7 @@
 }
 
 
-.modal {
+.modal-for-user {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -611,4 +611,11 @@
   background: var(--bg-light);
   color: var(--text-secondary);
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .modal-for-user {
+    padding: 0;
+  }
+  
 }

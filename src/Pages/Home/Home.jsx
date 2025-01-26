@@ -1,6 +1,7 @@
+import Header from "../../Components/Header/Header.jsx";
 import React, { useEffect, useId, useState } from "react";
 import "./Home.css"; // Importing the CSS file
-import Footer from "../../Components/Footer/Footer";
+import Footer from "../../Components/Footer/Footer.jsx";
 import axios from "axios";
 import { url } from "../../utils/url.js";
 import { Toaster,toast } from "sonner";
@@ -202,10 +203,7 @@ const Home = () => {
 
   return (
     <div className="landing-page">
-      <header className="header">
-        <h1>Saylani Microfinance App</h1>
-        <p>Simplifying Loan Applications for Everyone</p>
-      </header>
+      <Header />
 
       <main className="main-content">
         {/* Loan Categories */}
@@ -389,7 +387,7 @@ const Home = () => {
 
         {/* Modal for CNIC and Email */}
         {showModal && (
-          <div className="modal">
+          <div className="modal-for-user">
             <div className="modal-content">
               <h3>Enter Your Details</h3>
               <div className="form-group">
