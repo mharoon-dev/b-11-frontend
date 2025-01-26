@@ -5,6 +5,7 @@ import "./UserDashboard.css";
 import { url } from "../../utils/url";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const api = axios.create({
   baseURL: url,
 })
@@ -12,7 +13,7 @@ const api = axios.create({
 const UserDashboard = ( { isSidebarOpen,
     toggleSidebar,
     setIsSidebarOpen}) => {
-
+const navigate = useNavigate();
       const {user} = useSelector((state) => state.user);
       useEffect(() => {
         if (!user) {
