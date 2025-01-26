@@ -1,10 +1,37 @@
+import axios from "axios";
 import AdminNavbar from "../../Components/AdminNavbar/UserNavbar";
 import AdminSidebar from "../../Components/AdminSidebar/UserSidebar";
 import "./UserDashboard.css";
+import { url } from "../../utils/url";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+const api = axios.create({
+  baseURL: url,
+})
 
 const UserDashboard = ( { isSidebarOpen,
     toggleSidebar,
     setIsSidebarOpen}) => {
+
+      const {user} = useSelector((state) => state.user);
+      useEffect(() => {
+        if (!user) {
+          navigate("/login");
+      } 
+      } 
+      , []);
+      const [loanReq, setLoanReq] = useState(0);
+      useEffect(() => {
+        const getData = async () => {
+          
+          const res = await api.get("loanReq/get?id="+user?._id);
+          if (res) {
+            console.log(res);
+            setLoanReq(res?.data?.data.length);
+          }
+        }
+        getData();
+      })
   return (
     <>
       <div className="admin-dashboard-container">
@@ -18,20 +45,8 @@ const UserDashboard = ( { isSidebarOpen,
         <main className={`admin-main-content ${isSidebarOpen ? "" : "expanded"}`}>
         <div className="admin-dashboard-stats">
       <div className="admin-stat-card">
-        <h3>Total Students</h3>
-        <p>5000+</p>
-      </div>
-      <div className="admin-stat-card">
-        <h3>Cities</h3>
-        <p>05</p>
-      </div>
-      <div className="admin-stat-card">
-        <h3>Branches</h3>
-        <p>10</p>
-      </div>
-      <div className="admin-stat-card">
-        <h3>Courses</h3>
-        <p>24+</p>
+        <h3>Total Loan Requests</h3>
+        <p>{loanReq}</p>
       </div>
     </div>
         </main>
