@@ -105,7 +105,7 @@ const Login = () => {
               type="text"
               name="cnic" // Changed from storeNumber to cnic
               value={formData.cnic} // Changed from formData.storeNumber to formData.cnic
-              onChange={handleChange}
+              onChange={handleChange} //
               placeholder="Enter CNIC" // Changed placeholder text
               required
             />
