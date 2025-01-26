@@ -11,7 +11,7 @@ const UserNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
           <button className="admin-menu-btn" onClick={toggleSidebar}>
             <i className="fas fa-bars"></i>
           </button>
-          <h1>Admin Dashboard</h1>
+          <h1>User Dashboard</h1>
         </div>
         <div className="admin-navbar-right">
           <div className="admin-admin-profile">
