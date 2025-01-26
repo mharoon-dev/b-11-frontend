@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import "./Login.css";
-import {url} from "../../utils/url.js";
+import { url } from "../../utils/url.js";
 import axios from "axios";
 import {
   loginStart,
@@ -16,16 +16,16 @@ const api = axios.create({
 });
 
 const Login = () => {
-const {user} = useSelector(state => state.user)
-    useEffect(() => {
-      if(user){
-        navigate("/");
-      }
-    }, [user]);
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    storeNumber: "", // Changed from cnic to storeNumber
+    cnic: "", // Changed from storeNumber to cnic
     password: "",
   });
   const navigate = useNavigate();
@@ -36,8 +36,8 @@ const {user} = useSelector(state => state.user)
     try {
       dispatch(loginStart());
       const res = await api.post("auth/login", {
-        storeNumber: formData.storeNumber, // Changed from cnic to storeNumber
-        password: formData.password
+        cnic: formData.cnic, // Changed from storeNumber to cnic
+        password: formData.password,
       });
 
       console.log(res);
@@ -54,13 +54,35 @@ const {user} = useSelector(state => state.user)
           },
         });
 
+        const isPasswordChanged = res?.data?.data?.isPasswordChanged;
+        console.log(isPasswordChanged);
+
         setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          isPasswordChanged === true
+            ? navigate("/user/dashboard")
+            : navigate("/changepassword");
+        }, 4000);
+      } else {
+        toast.error(res?.data?.message || "Login failed", {
+          style: {
+            padding: "16px",
+            backgroundColor: "red",
+            color: "white",
+            border: "1px solid red",
+          },
+        });
       }
     } catch (error) {
       dispatch(loginFailure(error?.response?.data?.message));
       console.log(error);
+      toast.error(error?.response?.data?.message || "Login failed", {
+        style: {
+          padding: "16px",
+          backgroundColor: "red",
+          color: "white",
+          border: "1px solid red",
+        },
+      });
     }
 
     return;
@@ -81,10 +103,10 @@ const {user} = useSelector(state => state.user)
           <div className="input-group" style={{ width: "100%" }}>
             <input
               type="text"
-              name="storeNumber" // Changed from cnic to storeNumber
-              value={formData.storeNumber} // Changed from formData.cnic to formData.storeNumber
+              name="cnic" // Changed from storeNumber to cnic
+              value={formData.cnic} // Changed from formData.storeNumber to formData.cnic
               onChange={handleChange}
-              placeholder="Enter Store Number" // Changed placeholder text
+              placeholder="Enter CNIC" // Changed placeholder text
               required
             />
           </div>

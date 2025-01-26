@@ -13,11 +13,11 @@ const UserSidebar = ({ isSidebarOpen, setIsSidebarOpen, toggleSidebar }) => {
     <>
       <aside className={`admin-sidebar ${isSidebarOpen ? "open" : "closed"}`}>
           <div className="admin-sidebar-content">
-            <Link to="/user/dashboard" className={`admin-sidebar-link ${currentPath === '/admin/dashboard' ? 'active' : ''}`}>
+            <Link to="/user/dashboard" className={`admin-sidebar-link ${currentPath === '/user/dashboard' ? 'active' : ''}`}>
               <i className="fas fa-home"></i>
               <span>Dashboard</span>
             </Link>
-            <Link to="/user/loan-req" className={`admin-sidebar-link ${currentPath === '/admin/messages' ? 'active' : ''}`}>
+            <Link to="/user/loan-req" className={`admin-sidebar-link ${currentPath === '/user/loan-req' ? 'active' : ''}`}>
               <i className="fas fa-envelope"></i>
               <span>Loan Request</span>
             </Link>

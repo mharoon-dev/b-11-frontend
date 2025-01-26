@@ -3,7 +3,7 @@ import "./Home.css"; // Importing the CSS file
 import Footer from "../../Components/Footer/Footer";
 import axios from "axios";
 import { url } from "../../utils/url.js";
-import { toast } from "sonner";
+import { Toaster,toast } from "sonner";
 
 const Home = () => {
   const [category, setCategory] = useState("");
@@ -160,16 +160,24 @@ const Home = () => {
       setUserId(null);
       setCnic("");
       setEmail("");
-      toast.success("Application submitted successfully!", {
+      toast.success("Loan request submitted successfully! Check Your Email for credentials!", {
         style: {
           padding: "16px",
           backgroundColor: "#0eadad",
           color: "white",
           border: "1px solid #0eadad",
         },
-      })
+      });
     } catch (error) {
       console.error("Error submitting loan request:", error);
+      toast.error("Failed to submit loan request. Please try again.", {
+        style: {
+          padding: "16px",
+          backgroundColor: "red",
+          color: "white",
+          border: "1px solid red",
+        },
+      });
     }
   };
 
@@ -188,14 +196,6 @@ const Home = () => {
 
     if (res?.data?.data) {
       setUserId(res?.data?.data?._id);
-      // toast.success("Application submitted successfully!", {
-      //   style: {
-      //     padding: "16px",
-      //     backgroundColor: "#0eadad",
-      //     color: "white",
-      //     border: "1px solid #0eadad",
-      //   },
-      // });
     }
     setShowModal(false); // Close the modal after submission
   };
@@ -433,6 +433,7 @@ const Home = () => {
       </main>
 
       <Footer />
+      <Toaster position="top-right"/>
     </div>
   );
 };
