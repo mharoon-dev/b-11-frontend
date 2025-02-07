@@ -4,7 +4,7 @@ import "./Home.css"; // Importing the CSS file
 import Footer from "../../Components/Footer/Footer.jsx";
 import axios from "axios";
 import { url } from "../../utils/url.js";
-import { Toaster,toast } from "sonner";
+import { Toaster, toast } from "sonner";
 
 const Home = () => {
   const [category, setCategory] = useState("");
@@ -22,6 +22,7 @@ const Home = () => {
   const [cnic, setCnic] = useState(""); // State for CNIC input
   const [email, setEmail] = useState(""); // State for email input
   const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading
   const api = axios.create({
     baseURL: url,
   });
@@ -161,16 +162,21 @@ const Home = () => {
       setUserId(null);
       setCnic("");
       setEmail("");
-      toast.success("Loan request submitted successfully! Check Your Email for credentials!", {
-        style: {
-          padding: "16px",
-          backgroundColor: "#0eadad",
-          color: "white",
-          border: "1px solid #0eadad",
-        },
-      });
+      setLoading(false);
+      toast.success(
+        "Loan request submitted successfully! Check Your Email for credentials!",
+        {
+          style: {
+            padding: "16px",
+            backgroundColor: "#0eadad",
+            color: "white",
+            border: "1px solid #0eadad",
+          },
+        }
+      );
     } catch (error) {
       console.error("Error submitting loan request:", error);
+      setLoading(false);
       toast.error("Failed to submit loan request. Please try again.", {
         style: {
           padding: "16px",
@@ -179,6 +185,8 @@ const Home = () => {
           border: "1px solid red",
         },
       });
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -188,7 +196,14 @@ const Home = () => {
     }
   }, [userId]);
 
+  const changeLoading = () => {
+    setLoading(true);
+  };
+
   const handleModalSubmit = async () => {
+    setShowModal(false);
+
+    changeLoading(); // Start loading
     // Handle the submission of CNIC and email
     console.log("CNIC:", cnic);
     console.log("Email:", email);
@@ -197,8 +212,31 @@ const Home = () => {
 
     if (res?.data?.data) {
       setUserId(res?.data?.data?._id);
+    } else if (res?.data?.message === "User already exists") {
+      toast.error(
+        "This email or CNIC already exists! Please go to the Login Page!",
+        {
+          style: {
+            padding: "16px",
+            backgroundColor: "red",
+            color: "white",
+            border: "1px solid red",
+          },
+          duration: 5000, // Display for 5 seconds
+        }
+      );
+    } else {
+      setLoading(false);
+      toast.error("Failed to submit loan request. Please try again.", {
+        style: {
+          padding: "16px",
+          backgroundColor: "red",
+          color: "white",
+          border: "1px solid red",
+        },
+      });
     }
-    setShowModal(false); // Close the modal after submission
+    // Close the modal after submission
   };
 
   return (
@@ -206,6 +244,13 @@ const Home = () => {
       <Header />
 
       <main className="main-content">
+        {/* Loader */}
+        {loading && (
+          <div className="loader">
+            <div className="loader-spinner"></div>
+          </div>
+        )}
+
         {/* Loan Categories */}
         <section className="loan-categories">
           <h2>Loan Categories</h2>
@@ -431,7 +476,7 @@ const Home = () => {
       </main>
 
       <Footer />
-      <Toaster position="top-right"/>
+      <Toaster position="top-right" />
     </div>
   );
 };

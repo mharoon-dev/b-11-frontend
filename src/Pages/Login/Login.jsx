@@ -16,10 +16,24 @@ const api = axios.create({
 });
 
 const Login = () => {
+  const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.user);
   useEffect(() => {
+    setLoading(true);
     if (user) {
-      navigate("/");
+      const isPasswordChanged = user?.isPasswordChanged;
+      console.log("User is logged in");
+      setTimeout(() => {
+        setLoading(false);
+        isPasswordChanged === true
+          ? navigate("/user/dashboard")
+          : navigate("/changepassword");
+      }, 1000);
+    } else {
+      console.log("User is not logged in");
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   }, [user]);
 
@@ -32,6 +46,7 @@ const Login = () => {
 
   const handleCodeSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       dispatch(loginStart());
@@ -44,7 +59,7 @@ const Login = () => {
 
       if (res?.data?.message === "Login Successful") {
         dispatch(loginSuccess(res?.data?.data));
-        localStorage.setItem("adminToken", res?.data?.token);
+        localStorage.setItem("userToken", res?.data?.token);
         toast.success(res?.data?.message + "!", {
           style: {
             padding: "16px",
@@ -62,7 +77,9 @@ const Login = () => {
             ? navigate("/user/dashboard")
             : navigate("/changepassword");
         }, 4000);
+        setLoading(false);
       } else {
+        setLoading(false);
         toast.error(res?.data?.message || "Login failed", {
           style: {
             padding: "16px",
@@ -73,6 +90,7 @@ const Login = () => {
         });
       }
     } catch (error) {
+      setLoading(false);
       dispatch(loginFailure(error?.response?.data?.message));
       console.log(error);
       toast.error(error?.response?.data?.message || "Login failed", {
@@ -96,9 +114,15 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>User Login</h2>
+    <>
+      {loading && (
+        <div className="loader">
+          <div className="loader-spinner"></div>
+        </div>
+      )}
+      <div className="login-container">
+        <div className="login-box">
+          <h2>User Login</h2>
         <form onSubmit={handleCodeSubmit}>
           <div className="input-group" style={{ width: "100%" }}>
             <input
@@ -125,8 +149,9 @@ const Login = () => {
           </button>
         </form>
       </div>
-      <Toaster richColors position="top-right" />
-    </div>
+        <Toaster richColors position="top-right" />
+      </div>
+    </>
   );
 };
 

@@ -6,30 +6,39 @@
 }
 
 .header {
-  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-sky) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-navy) 0%,
+    var(--primary-sky) 100%
+  );
   color: var(--bg-white);
   text-align: center;
   padding: 3rem 1.5rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
 }
 
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 30% 107%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 5%, transparent 45%);
+  background: radial-gradient(
+    circle at 30% 107%,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 5%,
+    transparent 45%
+  );
 }
 
 .header h1 {
   margin: 0;
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 800;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   letter-spacing: -0.5px;
 }
 
@@ -63,14 +72,18 @@
 
 .loan-categories h2::after,
 .loan-calculator h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, var(--secondary-green), var(--primary-sky));
+  background: linear-gradient(
+    90deg,
+    var(--secondary-green),
+    var(--primary-sky)
+  );
   border-radius: 2px;
 }
 
@@ -85,7 +98,7 @@
   background: var(--bg-white);
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 2px solid transparent;
   position: relative;
@@ -93,13 +106,17 @@
 }
 
 .category-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 5px;
-  background: linear-gradient(90deg, var(--secondary-green), var(--primary-sky));
+  background: linear-gradient(
+    90deg,
+    var(--secondary-green),
+    var(--primary-sky)
+  );
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
@@ -108,7 +125,7 @@
 .category-card:hover {
   transform: translateY(-10px);
   border-color: var(--primary-sky);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 .category-card:hover::before {
@@ -161,7 +178,7 @@
   background: var(--bg-white);
   padding: 5rem 3rem;
   border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   margin-top: 3rem;
   position: relative;
   overflow: hidden;
@@ -175,6 +192,7 @@
 
 .form-group {
   display: flex;
+  z-index: 10; /* Increased z-index to ensure dropdown is above */
   flex-direction: column;
   gap: 0.8rem;
 }
@@ -199,7 +217,7 @@
 .form-group select:focus {
   border-color: var(--primary-sky);
   outline: none;
-  box-shadow: 0 0 0 4px rgba(0,119,182,0.1);
+  box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.1);
   background: var(--bg-white);
 }
 
@@ -225,7 +243,7 @@
 
 .calculate-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,119,182,0.3);
+  box-shadow: 0 8px 20px rgba(0, 119, 182, 0.3);
   background: linear-gradient(135deg, var(--primary-sky), var(--primary-navy));
 }
 
@@ -240,7 +258,11 @@
   color: var(--secondary-green);
   text-align: center;
   padding: 1.5rem;
-  background: linear-gradient(to right, rgba(46,196,182,0.1), rgba(0,119,182,0.1));
+  background: linear-gradient(
+    to right,
+    rgba(46, 196, 182, 0.1),
+    rgba(0, 119, 182, 0.1)
+  );
   border-radius: 12px;
   border: 2px solid var(--secondary-green);
   margin-top: 1.5rem; /* Added margin to separate from calculate button */
@@ -256,24 +278,28 @@
 }
 
 .footer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--secondary-green), var(--secondary-yellow));
+  background: linear-gradient(
+    90deg,
+    var(--secondary-green),
+    var(--secondary-yellow)
+  );
 }
 
 @media (max-width: 1024px) {
   .main-content {
     padding: 2rem 1.5rem;
   }
-  
+
   .categories-container {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
-  
+
   .loan-calculator {
     padding: 2rem;
   }
@@ -283,23 +309,23 @@
   .header {
     padding: 2rem 1rem;
   }
-  
+
   .main-content {
     padding: 1.5rem 1rem;
   }
-  
+
   .calculator-form {
     grid-template-columns: 1fr;
   }
-  
+
   .category-card {
     padding: 1.5rem;
   }
-  
+
   .form-group {
     margin-bottom: 1.2rem;
   }
-  
+
   .calculate-btn {
     padding: 1rem 2rem;
     width: 100%;
@@ -311,49 +337,48 @@
   .header h1 {
     font-size: clamp(2rem, 8vw, 2.5rem);
   }
-  
+
   .header p {
     font-size: 1rem;
   }
-  
+
   .category-card {
     padding: 1.2rem;
   }
-  
+
   .category-card h3 {
     font-size: 1.3rem;
   }
-  
+
   .category-card ul li {
     font-size: 1rem;
   }
-  
+
   .loan-calculator {
     padding: 10px;
   }
-  
+
   .form-group label {
     font-size: 1rem;
   }
-  
+
   .form-group input,
   .form-group select {
     padding: 0.8rem 1rem;
     font-size: 1rem;
   }
-  
+
   .calculate-btn {
     font-size: 1.1rem;
     padding: 0.8rem 1.5rem;
     height: 45px; /* Adjusted height for smaller screens */
   }
-  
+
   .emi-result {
     font-size: 1.2rem;
     padding: 1rem;
   }
 }
-
 
 /* Custom Dropdown Styles */
 .custom-dropdown {
@@ -386,7 +411,7 @@
 }
 
 .dropdown-header:after {
-  content: '▼';
+  content: "▼";
   font-size: 0.9em;
   color: var(--primary-sky);
   transition: transform 0.3s ease;
@@ -407,7 +432,7 @@
   border-radius: 12px;
   max-height: 280px;
   overflow-y: auto;
-  z-index: 300; /* Increased z-index to be higher than parent */
+  z-index: 300 !important; /* Increased z-index to be higher than parent */
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
   animation: dropdownFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   scrollbar-width: thin;
@@ -455,14 +480,18 @@
 }
 
 .dropdown-item:hover {
-  background: linear-gradient(135deg, var(--primary-sky) 0%, var(--secondary-green) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-sky) 0%,
+    var(--secondary-green) 100%
+  );
   color: var(--bg-white);
   padding-left: 2rem;
   letter-spacing: 0.5px;
 }
 
 .dropdown-item:before {
-  content: ''; 
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -483,18 +512,17 @@
     font-size: 1rem;
     border-radius: 10px;
   }
-  
+
   .dropdown-item {
     padding: 1rem 1.2rem;
     font-size: 0.95rem;
   }
-  
+
   .dropdown-list {
     max-height: 220px;
     border-radius: 10px;
   }
 }
-
 
 .modal-for-user {
   display: flex;
@@ -534,19 +562,19 @@
   .modal-content {
     padding: 1.5rem;
   }
-  
+
   .modal-content h3 {
     font-size: 1.5rem;
   }
-  
+
   .modal-content label {
     font-size: 1rem;
   }
-  
+
   .modal-content input {
     font-size: 1rem;
   }
-  
+
   .modal-content button {
     font-size: 1rem;
   }
@@ -617,5 +645,58 @@
   .modal-for-user {
     padding: 0;
   }
-  
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height for centering */
+  background: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Slightly more opaque background for better visibility */
+  position: fixed; /* Fixed position to cover the entire viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000 !important; /* Ensure it is above other content */
+  backdrop-filter: blur(
+    10px
+  ); /* Increased blur effect for a softer background */
+  border: 2px solid var(--primary-sky); /* Add a border for a more defined look */
+}
+
+.loader-spinner {
+  /* border: 8px solid var(--bg-light);  */
+  border-top: 8px solid var(--secondary-green); 
+  border-radius: 50%; /* Circular shape */
+  width: 80px; /* Increased width for a more prominent spinner */
+  height: 80px; /* Increased height for a more prominent spinner */
+  animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite; /* Added pulse animation */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    transform: rotate(0deg);
+    /* Normal size */
+  }
+  50% {
+    transform: scale(1.1);
+    transform: rotate(360deg);
+    /* Slightly larger for pulse effect */
+  }
+}
+
+@media (max-width: 768px) {
+  .loader-spinner {
+    width: 60px; /* Slightly larger spinner on mobile for better visibility */
+    height: 60px; /* Slightly larger spinner on mobile for better visibility */
+  }
 }

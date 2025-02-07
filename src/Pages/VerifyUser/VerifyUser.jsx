@@ -58,7 +58,7 @@ const VerifyUser = () => {
       dispatch(loginStart());
       const res = await api.post("auth/verifyEmail", { otp: otpString }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
 

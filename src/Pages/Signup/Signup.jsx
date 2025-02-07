@@ -43,7 +43,7 @@ const Signup = () => {
 
       if (res?.data?.status) {
         dispatch(loginSuccess(res?.data?.data));
-        localStorage.setItem("adminToken", res?.data?.token);
+        localStorage.setItem("userToken", res?.data?.token);
         toast.success(res?.data?.message, {
           style: {
             padding: "16px",

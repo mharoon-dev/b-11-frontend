@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./LoanRequest.css"; // Importing the CSS file for styling
-import UserNavbar from "../../Components/AdminNavbar/UserNavbar";
-import UserSidebar from "../../Components/AdminSidebar/UserSidebar";
+import UserNavbar from "../../Components/UserNavbar/UserNavbar";
+import UserSidebar from "../../Components/UserSidebar/UserSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { url } from "../../utils/url";
@@ -12,6 +12,7 @@ import {
 } from "../../redux/Slices/loanReqSlice.jsx"; // Updated action import
 
 const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [index, setIndex] = useState(false);
 
@@ -35,7 +36,6 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
   ]);
   const { user } = useSelector((state) => state.user);
   const { LoanReq } = useSelector((state) => state.loanReq);
-  console.log(LoanReq);
   const api = axios.create({
     baseURL: url,
   });
@@ -46,13 +46,16 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
   }, [LoanReq]);
 
   useEffect(() => {
+    setLoading(true);
     const res = api.get("loanreq/get?id=" + user?._id);
 
     res
       .then((res) => {
-        dispatch(getLoanReqSuccess(res?.data?.data)); // Updated action dispatch
+        dispatch(getLoanReqSuccess(res?.data?.data));
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, [user?._id]);
@@ -70,6 +73,7 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     const loanID = LoanReq[index]._id; // Using loanReq from state
 
     const witnessData = witnesses.map((witness) => ({
@@ -85,6 +89,7 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
       .put(`loanreq/update/${loanID}`, { witners: witnessData })
       .then((response) => {
         dispatch(updateLoanReqSuccess(response.data.data)); // Dispatching updated loans
+        setLoading(false);
         toast.success("Witnesses added successfully!", {
           style: {
             padding: "16px",
@@ -99,6 +104,7 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
       })
       .catch((error) => {
         console.error("There was an error updating the witnesses!", error);
+        setLoading(false);
         toast.error("Failed to add witnesses.", {
           style: {
             padding: "16px",
@@ -111,9 +117,15 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
   };
 
   return (
-    <div className="admin-dashboard-content">
-      <UserNavbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <main className={`admin-main-content ${isSidebarOpen ? "" : "expanded"}`}>
+    <>
+      {loading && (
+        <div className="loader">
+          <div className="loader-spinner"></div>
+        </div>
+      )}
+      <div className="admin-dashboard-content">
+        <UserNavbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <main className={`admin-main-content ${isSidebarOpen ? "" : "expanded"}`}>
         <UserSidebar
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
@@ -225,6 +237,7 @@ const LoanRequest = ({ isSidebarOpen, toggleSidebar }) => {
         <Toaster position="top-right" />
       </main>
     </div>
+    </>
   );
 };
 

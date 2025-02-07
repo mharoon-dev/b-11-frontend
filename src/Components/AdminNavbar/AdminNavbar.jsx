@@ -1,8 +1,8 @@
 import React from "react";
-import "./UserNavbar.css";
+import "./AdminNavbar.css";
 import { useSelector } from "react-redux";
 
-const UserNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
+const AdminNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
   const { user } = useSelector((state) => state.user);
   return (
     <>
@@ -11,7 +11,7 @@ const UserNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
           <button className="admin-menu-btn" onClick={toggleSidebar}>
             <i className="fas fa-bars"></i>
           </button>
-          <h1>User Dashboard</h1>
+          <h1>Admin Dashboard</h1>
         </div>
         <div className="admin-navbar-right">
           <div className="admin-admin-profile">
@@ -20,7 +20,7 @@ const UserNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
               alt="Admin"
               className="admin-avatar"
             />
-            <span className="admin-name">{user?.branchName}</span>
+            <span className="admin-name">{user?.email?.split("@")[0]}</span>
           </div>
         </div>
       </nav>
@@ -28,4 +28,4 @@ const UserNavbar = ({ toggleSidebar, isSidebarOpen, setIsSidebarOpen }) => {
   );
 };
 
-export default UserNavbar;
+export default AdminNavbar;

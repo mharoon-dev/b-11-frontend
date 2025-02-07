@@ -5,7 +5,7 @@ const UserSidebar = ({ isSidebarOpen, setIsSidebarOpen, toggleSidebar }) => {
   const currentPath = location.pathname;
 
   const handleLogout = () => {
-    localStorage.removeItem("adminToken");
+    localStorage.removeItem("userToken");
     navigate("/admin/login");
   };
 

@@ -1,7 +1,7 @@
 import axios from "axios";
-import UserNavbar from "../../Components/UserNavbar/UserNavbar";
-import UserSidebar from "../../Components/UserSidebar/UserSidebar";
-import "./UserDashboard.css";
+import AdminNavbar from "../../Components/AdminNavbar/AdminNavbar";
+import AdminSidebar from "../../Components/AdminSidebar/AdminSidebar";
+import "./AdminDashboard.css";
 import { url } from "../../utils/url";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,8 +10,8 @@ const api = axios.create({
   baseURL: url,
 });
 
-const UserDashboard = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen }) => {
-  const [loading, setLoading] = useState(true);
+const AdminDashboard = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen }) => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const getData = async () => {
@@ -22,20 +22,20 @@ const UserDashboard = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen }) => {
     }
   };
 
-  useEffect(() => {
-    setLoading(true);
-    if (!user) {
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/login");
-      }, 1000);
-    } else {
-      getData(); 
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }
-  }, [user]); // Added user as a dependency
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (!user) {
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //       navigate("/login");
+  //     }, 1000);
+  //   } else {
+  //     getData(); 
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //     }, 1000);
+  //   }
+  // }, [user]); // Added user as a dependency
 
   const [loanReq, setLoanReq] = useState(0);
 
@@ -76,4 +76,4 @@ const UserDashboard = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen }) => {
   );
 };
 
-export default UserDashboard;
+export default AdminDashboard;

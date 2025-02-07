@@ -17,35 +17,65 @@ import VerifyUser from "./Pages/VerifyUser/VerifyUser.jsx";
 import ChangePassword from "./Pages/ChangePassword/ChangePassword.jsx";
 import UserDashboard from "./Pages/UserDashboard/UserDashboard.jsx";
 import LoanRequest from "./Pages/LoanRequest/LoanRequest.jsx";
+import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard.jsx";
 
 const api = axios.create({
   baseURL: url,
 });
 
 function App() {
+  const currentPath = window.location.pathname; // Get the current path
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("userToken");
+  console.log(token);
 
-  useEffect(() => {
-    const isUserLoggedIn = async () => {
+  const checkUserLoggedIn = async () => {
+    try {
+      if (!token) {
+        console.log("No token found");
+        return 
+      }
+      setLoading(true);
       const res = await api.get("auth/isUserLoggedIn", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       console.log(res);
+      setLoading(false);
       if (res?.data?.message === "User is logged in") {
         dispatch(loginSuccess(res?.data?.data));
       }
-    };
-    isUserLoggedIn();
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentPath === "/user/dashboard" || currentPath === "/login") {
+      checkUserLoggedIn(); // Call the function if the path matches
+    }
   }, []);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
+
   return (
     <>
+      {loading && (
+        <div className="loader">
+          <div className="loader-spinner"></div>
+        </div>
+      )}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -57,12 +87,22 @@ function App() {
             path="/user/dashboard"
             element={
               <UserDashboard
-              isSidebarOpen={isSidebarOpen}
-              toggleSidebar={toggleSidebar}
-              setIsSidebarOpen={setIsSidebarOpen}
+                isSidebarOpen={isSidebarOpen}
+                toggleSidebar={toggleSidebar}
+                setIsSidebarOpen={setIsSidebarOpen}
               />
-            } />
-            <Route path="/user/loan-req" element={<LoanRequest isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />} />
+            }
+          />
+          <Route
+            path="/user/loan-req"
+            element={
+              <LoanRequest
+                isSidebarOpen={isSidebarOpen}
+                toggleSidebar={toggleSidebar}
+              />
+            }
+          />
+          <Route path="/admin/dashboard" element={<AdminDashboard isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} setIsSidebarOpen={setIsSidebarOpen} />} />
         </Routes>
       </BrowserRouter>
     </>

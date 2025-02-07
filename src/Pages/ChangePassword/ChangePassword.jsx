@@ -9,11 +9,13 @@ const api = axios.create({
   baseURL: url,
 })
 const ChangePassword = () => {
+  const [loading, setLoading] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const { user } = useSelector((state) => state.user);
 const navigate = useNavigate();
   const handleChangePassword = async(e) => {
     e.preventDefault();
+    setLoading(true);
     // Logic to handle password change goes here
     console.log("New Password:", newPassword);
 
@@ -22,6 +24,7 @@ const navigate = useNavigate();
 
     if (res?.data?.message === "Password change Successfully") {
       console.log(res);
+      setLoading(false);
       toast.success("Password changed successfully", {
         style: {
           padding: "16px",
@@ -35,6 +38,7 @@ const navigate = useNavigate();
         navigate("/user/dashboard");
       }, 2000);
     } else {
+      setLoading(false);
       toast.error("Failed to change password", {
         style: {
           padding: "16px",
@@ -47,6 +51,12 @@ const navigate = useNavigate();
   };
 
   return (
+    <>
+    {loading && (
+        <div className="loader">
+          <div className="loader-spinner"></div>
+        </div>
+      )}
     <div className="change-password-container">
       <div className="change-password-box">
         <h2>Change Password</h2>
@@ -67,6 +77,7 @@ const navigate = useNavigate();
       </div>
       <Toaster  position="top-right"/>
     </div>
+    </>
   );
 };
 
